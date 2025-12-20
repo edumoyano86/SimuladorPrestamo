@@ -55,5 +55,21 @@ function cuotaMensual(total, plazo) {
   return cuota;
 }
 
+// Array para almacenar todos los datos del prestamo solicitado
+
+const datosPrestamo = [];
+
+let interes = obtenerInteres(plazo);
+let interesCalculado = interesaPagar(monto, interes);
+let total = totalPagar(monto, interesCalculado);
+let cuota = cuotaMensual(total, plazo);
+
+datosPrestamo.push(monto, plazo, interesCalculado, total, cuota);
+
+console.log(datosPrestamo)
+
+// Nombre de los datos calculados para mostrarlos
+
+const nombresDatos = ["Monto solicitado", "Plazo seleccionado", "Intereses a pagar", "Total a pagar", "Cuota Mensual"];
 
 
