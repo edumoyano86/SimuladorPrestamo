@@ -47,6 +47,8 @@ function totalPagar(monto, interesCalculado) {
     return total;
 }
 
+
+
 // Funcion para calcular cuanto pagara el cliente por mes
 
 function cuotaMensual(total, plazo) {
@@ -67,9 +69,5 @@ let cuota = cuotaMensual(total, plazo);
 datosPrestamo.push(monto, plazo, interesCalculado, total, cuota);
 
 console.log(datosPrestamo)
-
-// Nombre de los datos calculados para mostrarlos
-
-const nombresDatos = ["Monto solicitado", "Plazo seleccionado", "Intereses a pagar", "Total a pagar", "Cuota Mensual"];
 
 
