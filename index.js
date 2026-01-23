@@ -1,17 +1,51 @@
-// Defino los interes segun el plazo
+const prestamos = [];
 
+ // Declaro las variables de interes segun el plazo 
 const intunanio = 0.35;
 const intcincoanio = 0.50;
 const intdiezanio = 0.60;
 
-// Obtengo el monto solicitado y el plazo elegido por el cliente
+// Lectura de los datos desde html
 
-let monto = Number(prompt("Ingrese monto a solicitar:"));
+const inputMonto = document.getElementById("monto");
+const selectPlazo = document.getElementById("plazo");
+const botonCalcular = document.getElementById("calcular");
+const resultado = document.getElementById("resultado");
 
-let plazo = Number(prompt("Elija plazo 1 año, 5 año o 10 años:"));
+botonCalcular.addEventListener("click", () => {
+  // Obtengo los valores ingresados por el usuario
+  const monto = Number(inputMonto.value);
+  const plazo = Number(selectPlazo.value);
+   
+  // Llamo a las funciones 
+  const interes = obtenerInteres(plazo);
+  const interesCalculado = interesaPagar(monto, interes);
+  const total = totalPagar(monto, interesCalculado);
+  const cuota = cuotaMensual(total, plazo);
 
-// Funcion para conectar el plazo elegido con la tasa de interes correspondiente
+  // Guardo los datos en un objeto
+  const prestamo = {
+    monto: monto,
+    plazo: plazo,
+    intereses: interesCalculado,
+    total: total,
+    cuota: cuota,
+  };
 
+  prestamos.push(prestamo);
+ // Muestro el resultado 
+  resultado.innerHTML = `
+    <p>Monto solicitado: $${monto}</p>
+    <p>Plazo: ${plazo} años</p>
+    <p>Intereses: $${interesCalculado}</p>
+    <p>Total a pagar: $${total}</p>
+    <p>Cuota mensual: $${cuota.toFixed(2)}</p>
+  `;
+});
+
+
+
+// Todas las funciones que ya tenia para el calculo de los datos
 function obtenerInteres(plazo) {
   let interes;
 
@@ -26,30 +60,23 @@ function obtenerInteres(plazo) {
       interes = intdiezanio;
       break;
     default:
-      alert("Plazo inválido");
+      resultado.innerHTML = "Plazo inválido";
       interes = 0;
   }
 
   return interes;
 }
 
-// Funcion que calula el interes que pagara el cliente
 
 function interesaPagar(monto, interes) {
   let interesCalculado = monto * interes;
   return interesCalculado;
 }
 
-// Con esta funcion calculo el monto toal que terminara pagando el cliente
-
 function totalPagar(monto, interesCalculado) {
     let total = monto + interesCalculado;
     return total;
 }
-
-
-
-// Funcion para calcular cuanto pagara el cliente por mes
 
 function cuotaMensual(total, plazo) {
   let meses = plazo * 12;
@@ -57,17 +84,5 @@ function cuotaMensual(total, plazo) {
   return cuota;
 }
 
-// Array para almacenar todos los datos del prestamo solicitado
-
-const datosPrestamo = [];
-
-let interes = obtenerInteres(plazo);
-let interesCalculado = interesaPagar(monto, interes);
-let total = totalPagar(monto, interesCalculado);
-let cuota = cuotaMensual(total, plazo);
-
-datosPrestamo.push(monto, plazo, interesCalculado, total, cuota);
-
-console.log(datosPrestamo)
 
 
