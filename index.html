@@ -4,27 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulador de Prestamos</title>
+    <link rel="stylesheet" href="styles.css">
+
     <script src="index.js" defer></script>
+
 </head>
 <body>
-    <h1>Simulador de Prestamos - Eduardo</h1>
+    <h1>SIMULADOR DE PRESTAMOS</h1>
 
-    <input type="number" id="monto" placeholder="Monto solicitado">
+    <div class="contenedor">
+        <label for="monto">Ingrese el monto que desea solicitar</label>
+        <input type="number" id="monto" placeholder="Monto solicitado">
 
-    <select id="plazo">
-        <option value="1">1 año</option>
-        <option value="5">5 años</option>
-        <option value="10">10 años</option>
-    </select>
+        <label for="plazo">Seleccione el plazo</label>
+        <select id="plazo">
+            <option value="1">1 año</option>
+            <option value="5">5 años</option>
+            <option value="10">10 años</option>
+        </select>
+        <button id="calcular">CALCULAR</button>
+    </div>  
 
-    <button id="calcular">Calcular</button>
+    <div class="seccion">
+        <h2>Datos del Prestamo</h2>
+        <div id="resultado" class="card"></div>
+    </div>
+    
+    <div class="seccion">
+        <h2>Historial de préstamos:</h2>
+        <div id="historial"></div>
+    </div>
+    
 
-    <div id="resultado"></div>
-
-    <h2>Historial de préstamos</h2>
-    <div id="historial"></div>
-
-    <button id="borrar">Borrar préstamos</button>
+    <button id="borrar">BORRAR PRESTAMOS</button>
 
 </body>
 </html>

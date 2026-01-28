@@ -40,11 +40,11 @@ botonCalcular.addEventListener("click", () => {
   prestamos.push(prestamo);
  // Muestro el resultado 
   resultado.innerHTML = `
-    <p>Monto solicitado: $${monto}</p>
-    <p>Plazo: ${plazo} años</p>
-    <p>Intereses: $${interesCalculado}</p>
-    <p>Total a pagar: $${total}</p>
-    <p>Cuota mensual: $${cuota.toFixed(2)}</p>
+    <p><strong>Monto solicitado:</strong> $${monto}</p>
+    <p><strong>Plazo:</strong> ${plazo} años</p>
+    <p><strong>Intereses:</strong> $${interesCalculado}</p>
+    <p><strong>Total a pagar:</strong> $${total}</p>
+    <p><strong>Cuota mensual:</strong> $${cuota.toFixed(2)}</p>
   `;
 
   // Guardado de los prestamos en el localStorage
@@ -122,14 +122,14 @@ function renderPrestamos() {
   const totales = calcularTotales();
 
   historial.innerHTML = `
-    <h2>Préstamos guardados</h2>
+    <h3>Préstamos guardados</h3>
     ${html}
 
     <hr>
 
-    <h2>Totales</h2>
-    <p>Total prestado: $${totales.totalPrestado}</p>
-    <p>Total a cobrar: $${totales.totalACobrar}</p>
+    <h3>Totales</h3>
+    <p><strong>Total prestado:</strong> $${totales.totalPrestado}</p>
+    <p><strong>Total a cobrar:</strong> $${totales.totalACobrar}</p>
   `;
 
 }

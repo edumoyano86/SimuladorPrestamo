@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Sriracha&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+
+body {    
+    background-color: #f2f2f2;
+    padding: 30px 400px;
+}
+
+h1 {
+    color: #333;
+    font-family: "Sriracha", cursive;
+}
+
+.contenedor {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+}
+
+label {
+    margin: 20px;
+    font-size: large;
+    font-weight: bold;
+}
+
+input, select {
+    margin: 20px;
+    border-radius: 10px;
+    border: 1px solid rgb(27, 27, 27);
+    padding: 10px;
+    width: 100%;
+}
+
+button {
+    background-color: rgb(44, 214, 214);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: larger;
+    font-weight: bold;
+    color: red;
+    margin: 20px;
+    border-radius: 10px;
+    padding: 5px;
+    width: 20%;
+    cursor: pointer;
+}
+
+.seccion {
+  margin-top: 30px;
+  padding-top: 15px;
+  border-top: 2px solid #ddd;
+}
+
+h2 {
+    margin: 10px 0px;
+    color: #555;
+    font-family: "Sriracha", cursive;
+}
+
+#resultado, #historial {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: 20px;
+}
+
+.prestamo, .card{
+  background-color: #fafafa;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  border-left: 5px solid #2fd6d6;
+}
+
+.prestamo h3, p {
+    margin: 10px 5px;
+}
+
+h3 {
+    margin: 15px 0px;
+}
+
+
