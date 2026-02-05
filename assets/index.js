@@ -7,6 +7,8 @@ const intdiezanio = 0.60;
 
 // Accediendo al DOM
 
+const inputNombre = document.getElementById("nombre");
+const inputIngreso = document.getElementById("ingreso");
 const inputMonto = document.getElementById("monto");
 const selectPlazo = document.getElementById("plazo");
 const botonCalcular = document.getElementById("calcular");
@@ -19,8 +21,16 @@ const botonBorrar = document.getElementById("borrar");
 botonCalcular.addEventListener("click", () => {
 
   // Obtengo los valores ingresados por el usuario
+  const nombre = inputNombre.value;
+  const ingreso = Number(inputIngreso.value);
   const monto = Number(inputMonto.value);
   const plazo = Number(selectPlazo.value);
+
+  if (nombre === "" || ingreso <= 0 || monto <= 0) {
+    resultado.innerHTML = "<p>Por favor complete correctamente todos los campos</p>";
+    return;
+  }
+
    
   // Llamo a las funciones 
   const interes = obtenerInteres(plazo);
@@ -30,6 +40,8 @@ botonCalcular.addEventListener("click", () => {
 
   // Guardo los datos en un objeto
   const prestamo = {
+    nombre: nombre,
+    ingreso: ingreso,
     monto: monto,
     plazo: plazo,
     intereses: interesCalculado,
@@ -40,6 +52,8 @@ botonCalcular.addEventListener("click", () => {
   prestamos.push(prestamo);
  // Muestro el resultado 
   resultado.innerHTML = `
+    <p><strong>Cliente:</strong> ${nombre}</p>
+    <p><strong>Ingreso anual:</strong> $${ingreso}</p>
     <p><strong>Monto solicitado:</strong> $${monto}</p>
     <p><strong>Plazo:</strong> ${plazo} años</p>
     <p><strong>Intereses:</strong> $${interesCalculado}</p>
