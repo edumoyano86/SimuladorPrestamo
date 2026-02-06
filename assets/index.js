@@ -1,9 +1,9 @@
 const prestamos = [];
 
- // Declaro las variables de interes segun el plazo 
-const intunanio = 0.35;
-const intcincoanio = 0.50;
-const intdiezanio = 0.60;
+ // Obetencion de las tasas desde el archivo json 
+let tiposPrestamo = [];
+
+
 
 // Accediendo al DOM
 
@@ -11,10 +11,34 @@ const inputNombre = document.getElementById("nombre");
 const inputIngreso = document.getElementById("ingreso");
 const inputMonto = document.getElementById("monto");
 const selectPlazo = document.getElementById("plazo");
+const selectTipo = document.getElementById("tipo");
 const botonCalcular = document.getElementById("calcular");
 const resultado = document.getElementById("resultado");
 const historial = document.getElementById("historial");
 const botonBorrar = document.getElementById("borrar");
+
+// Obetencion de los prestamos desde el archivo json 
+
+fetch("./db/tasas.json")
+  .then(respuesta => respuesta.json())
+  .then(datos => {
+    tiposPrestamo = datos;
+    tiposPrestamo.forEach((item) => {
+      const option = document.createElement("option");
+      option.value = item.tipo;
+      option.textContent = item.tipo;
+      selectTipo.appendChild(option);
+    });
+
+    cargarPlazos(selectTipo.value);
+  })
+  .catch(error => console.log("Error cargando JSON:", error));
+
+selectTipo.addEventListener("change", () => {
+  cargarPlazos(selectTipo.value);
+});
+
+
 
 // CALCULO DEL PRESTAMO Y GUARDADO EN LOCALSTORAGE
 
@@ -25,6 +49,7 @@ botonCalcular.addEventListener("click", () => {
   const ingreso = Number(inputIngreso.value);
   const monto = Number(inputMonto.value);
   const plazo = Number(selectPlazo.value);
+  const tipo = selectTipo.value;
 
   if (nombre === "" || ingreso <= 0 || monto <= 0) {
     resultado.innerHTML = "<p>Por favor complete correctamente todos los campos</p>";
@@ -32,8 +57,15 @@ botonCalcular.addEventListener("click", () => {
   }
 
    
-  // Llamo a las funciones 
-  const interes = obtenerInteres(plazo);
+  // LLAMO A LAS FUNCIONES 
+  const interes = obtenerInteres(tipo, plazo);
+  // Validacion si existe la tasa y el tipo
+  if (interes === null) {
+    resultado.innerHTML = "No existe una tasa para ese tipo y plazo";
+    return;
+  }
+
+
   const interesCalculado = interesaPagar(monto, interes);
   const total = totalPagar(monto, interesCalculado);
   const cuota = cuotaMensual(total, plazo);
@@ -55,7 +87,7 @@ botonCalcular.addEventListener("click", () => {
     <p><strong>Cliente:</strong> ${nombre}</p>
     <p><strong>Ingreso anual:</strong> $${ingreso}</p>
     <p><strong>Monto solicitado:</strong> $${monto}</p>
-    <p><strong>Plazo:</strong> ${plazo} años</p>
+    <p><strong>Plazo:</strong> ${plazo} meses</p>
     <p><strong>Intereses:</strong> $${interesCalculado}</p>
     <p><strong>Total a pagar:</strong> $${total}</p>
     <p><strong>Cuota mensual:</strong> $${cuota.toFixed(2)}</p>
@@ -68,27 +100,48 @@ botonCalcular.addEventListener("click", () => {
 
 
 
-// Todas las funciones que ya tenia en la primer entrega para el calculo de los datos
-function obtenerInteres(plazo) {
-  let interes;
+// FUNCIONES
 
-  switch (plazo) {
-    case 1:
-      interes = intunanio;
-      break;
-    case 5:
-      interes = intcincoanio;
-      break;
-    case 10:
-      interes = intdiezanio;
-      break;
-    default:
-      resultado.innerHTML = "Plazo inválido";
-      interes = 0;
+function cargarPlazos(tipoSeleccionado) {
+  const tipoEncontrado = tiposPrestamo.find(
+    (item) => item.tipo === tipoSeleccionado
+  );
+
+  selectPlazo.innerHTML = "";
+
+  if (!tipoEncontrado) return;
+
+  tipoEncontrado.plazos.forEach((plazo) => {
+    const option = document.createElement("option");
+    option.value = plazo.meses;
+    option.textContent = `${plazo.meses} meses`;
+    selectPlazo.appendChild(option);
+  });
+}
+
+
+function obtenerInteres(tipo, plazo) {
+
+  const tipoEncontrado = tiposPrestamo.find(
+    (item) => item.tipo === tipo
+  );
+
+  if (!tipoEncontrado) {
+    return null;
   }
 
-  return interes;
+  const plazoEncontrado = tipoEncontrado.plazos.find(
+    (p) => p.meses === plazo
+  );
+
+  if (!plazoEncontrado) {
+    return null;
+  }
+
+  return plazoEncontrado.tasa;
 }
+
+
 
 
 function interesaPagar(monto, interes) {

@@ -1,0 +1,34 @@
+[
+  {
+    "tipo": "Personal",
+    "plazos": [
+      { "meses": 12, "tasa": 0.35 },
+      { "meses": 24, "tasa": 0.40 },
+      { "meses": 36, "tasa": 0.45 }
+    ]
+  },
+  {
+    "tipo": "Hipotecario",
+    "plazos": [
+      { "meses": 60, "tasa": 0.18 },
+      { "meses": 120, "tasa": 0.20 },
+      { "meses": 240, "tasa": 0.22 }
+    ]
+  },
+  {
+    "tipo": "Automotor",
+    "plazos": [
+      { "meses": 24, "tasa": 0.22 },
+      { "meses": 48, "tasa": 0.25 },
+      { "meses": 60, "tasa": 0.27 }
+    ]
+  },
+  {
+    "tipo": "Estudiantil",
+    "plazos": [
+      { "meses": 12, "tasa": 0.15 },
+      { "meses": 24, "tasa": 0.18 },
+      { "meses": 36, "tasa": 0.20 }
+    ]
+  }
+]
