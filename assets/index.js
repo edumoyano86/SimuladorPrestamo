@@ -2,12 +2,10 @@ const prestamos = [];
 let indiceEdicion = null;
 
 let tiposPrestamo = [];
-
-
-
 // Accediendo al DOM
 
 const inputNombre = document.getElementById("nombre");
+const inputEdad = document.getElementById("edad");
 const inputIngreso = document.getElementById("ingreso");
 const inputMonto = document.getElementById("monto");
 const selectPlazo = document.getElementById("plazo");
@@ -16,6 +14,8 @@ const botonCalcular = document.getElementById("calcular");
 const resultado = document.getElementById("resultado");
 const historial = document.getElementById("historial");
 const botonBorrar = document.getElementById("borrar");
+
+
 
 // Obetencion de los tipos de prestamos desde el archivo json 
 
@@ -37,9 +37,26 @@ fetch("./db/tasas.json")
   .catch(error => console.log("Error cargando JSON:", error));
 
 selectTipo.addEventListener("change", () => {
-  cargarPlazos(selectTipo.value);
+  cargarPlazos(selectTipo.value, selectPlazo);
 });
 
+// Funcion para cargar plazos
+function cargarPlazos(tipoSeleccionado) {
+  const tipoEncontrado = tiposPrestamo.find(
+    (item) => item.tipo === tipoSeleccionado
+  );
+
+  selectPlazo.innerHTML = "";
+
+  if (!tipoEncontrado) return;
+
+  tipoEncontrado.plazos.forEach((plazo) => {
+    const option = document.createElement("option");
+    option.value = plazo.meses;
+    option.textContent = `${plazo.meses} meses`;
+    selectPlazo.appendChild(option);
+  });
+}
 
 
 // CALCULO DEL PRESTAMO Y GUARDADO EN LOCALSTORAGE
@@ -52,6 +69,25 @@ botonCalcular.addEventListener("click", () => {
   const monto = Number(inputMonto.value);
   const plazo = Number(selectPlazo.value);
   const tipo = selectTipo.value;
+  const edad = Number(inputEdad.value);
+
+  if (edad < 18) {
+    Swal.fire({
+      icon: "error",
+      title: "Edad no permitida",
+      text: "Debe ser mayor de 18 años para solicitar un préstamo",
+    });
+    return;
+  }
+
+  if (edad > 70) {
+    Swal.fire({
+      icon: "error",
+      title: "Edad no permitida",
+      text: "No se otorgan préstamos a mayores de 70 años",
+    });
+    return;
+  }
 
   if (nombre === "" || ingreso <= 0 || monto <= 0) {
     Swal.fire({
@@ -62,6 +98,12 @@ botonCalcular.addEventListener("click", () => {
     return;
   }
 
+  // LLAMO A LAS FUNCIONES 
+  const interes = obtenerInteres(tipo, plazo, tiposPrestamo);
+  const interesCalculado = interesaPagar(monto, interes);
+  const total = totalPagar(monto, interesCalculado);
+  const cuota = cuotaMensual(total, plazo);
+
   // Validacion si existe la tasa y el tipo
   if (interes === null) {
     Swal.fire({
@@ -71,14 +113,7 @@ botonCalcular.addEventListener("click", () => {
     });
     return;
   }
-
-
-  // LLAMO A LAS FUNCIONES 
-  const interes = obtenerInteres(tipo, plazo);
-  const interesCalculado = interesaPagar(monto, interes);
-  const total = totalPagar(monto, interesCalculado);
-  const cuota = cuotaMensual(total, plazo);
-
+  
   // Limite del 30% del ingreso mensual para la cuota del prestamo
   const ingresoMensual = ingreso / 12;
   const maxCuota = ingresoMensual * 0.3;
@@ -99,6 +134,7 @@ botonCalcular.addEventListener("click", () => {
   // Guardo los datos en un objeto
   const prestamo = {
     nombre: nombre,
+    edad: edad,
     ingreso: ingreso,
     monto: monto,
     plazo: plazo,
@@ -119,6 +155,7 @@ botonCalcular.addEventListener("click", () => {
  // Muestro el resultado 
   resultado.innerHTML = `
     <p><strong>Cliente:</strong> ${nombre}</p>
+    <p><strong>Edad:</strong> ${edad}</p>
     <p><strong>Ingreso anual:</strong> $${ingreso}</p>
     <p><strong>Tipo de préstamo:</strong> ${tipo}</p>
     <p><strong>Plazo:</strong> ${plazo} meses</p>
@@ -135,64 +172,6 @@ botonCalcular.addEventListener("click", () => {
 
 });
 
-
-
-// FUNCIONES
-// Funciones para calcular los datos del prestamo 
-function cargarPlazos(tipoSeleccionado) {
-  const tipoEncontrado = tiposPrestamo.find(
-    (item) => item.tipo === tipoSeleccionado
-  );
-
-  selectPlazo.innerHTML = "";
-
-  if (!tipoEncontrado) return;
-
-  tipoEncontrado.plazos.forEach((plazo) => {
-    const option = document.createElement("option");
-    option.value = plazo.meses;
-    option.textContent = `${plazo.meses} meses`;
-    selectPlazo.appendChild(option);
-  });
-}
-
-function obtenerInteres(tipo, plazo) {
-
-  const tipoEncontrado = tiposPrestamo.find(
-    (item) => item.tipo === tipo
-  );
-
-  if (!tipoEncontrado) {
-    return null;
-  }
-
-  const plazoEncontrado = tipoEncontrado.plazos.find(
-    (p) => p.meses === plazo
-  );
-
-  if (!plazoEncontrado) {
-    return null;
-  }
-
-  return plazoEncontrado.tasa;
-}
-
-function interesaPagar(monto, interes) {
-  let interesCalculado = monto * interes;
-  return interesCalculado;
-}
-
-function totalPagar(monto, interesCalculado) {
-    let total = monto + interesCalculado;
-    return total;
-}
-
-function cuotaMensual(total, plazo) {
-  let meses = plazo * 12;
-  let cuota = total / meses;
-  return cuota;
-}
-
 // Recuperacion de los prestamos guardados en el localStorage
 const prestamosGuardados = localStorage.getItem("prestamos");
 
@@ -205,6 +184,7 @@ function editarPrestamo(index) {
   const prestamo = prestamos[index];
 
   inputNombre.value = prestamo.nombre;
+  inputEdad.value = prestamo.edad;
   inputIngreso.value = prestamo.ingreso;
   inputMonto.value = prestamo.monto;
   selectTipo.value = prestamo.tipo;
@@ -230,6 +210,7 @@ function renderPrestamos() {
     return `
       <div class="prestamo">
         <h3>${prestamo.nombre}</h3>
+        <p>Edad: ${prestamo.edad}</p>
         <p>Tipo: ${prestamo.tipo}</p>
         <p>Monto: $${prestamo.monto}</p>
         <p>Cuota: $${prestamo.cuota.toFixed(2)}</p>
@@ -311,5 +292,7 @@ botonBorrar.addEventListener("click", () => {
     }
   });
 });
+
+
 
 

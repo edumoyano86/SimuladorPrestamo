@@ -6,6 +6,7 @@
     <title>Simulador de Prestamos</title>
     <link rel="stylesheet" href="assets/styles.css">
 
+    <script src="assets/calculos.js"></script>
     <script src="assets/index.js" defer></script>
 
 </head>
@@ -16,6 +17,10 @@
         <label for="nombre">Nombre del cliente</label>
         <input type="text" id="nombre" placeholder="Ingrese su nombre">
 
+        <label for="edad">Edad</label>
+        <input type="number" id="edad" placeholder="Ingrese su edad">
+
+
         <label for="ingreso">Ingreso mensual</label>
         <input type="number" id="ingreso" placeholder="Ingreso mensual">
 
@@ -23,29 +28,29 @@
         <label for="monto">Ingrese el monto que desea solicitar</label>
         <input type="number" id="monto" placeholder="Monto solicitado">
 
-        <label for="plazo">Seleccione el plazo</label>
-
-        <select id="plazo"></select>
-
         <label for="tipo">Tipo de préstamo</label>
         <select id="tipo"></select>
 
+        <label for="plazo">Seleccione el plazo</label>
+        <select id="plazo"></select>
+
         <button id="calcular">CALCULAR</button>
-    </div>  
 
-    <div class="seccion">
-        <h2>Datos del Prestamo</h2>
-        <div id="resultado" class="card"></div>
-    </div>
+        <div class="seccion">
+            <h2>Datos del Prestamo</h2>
+            <div id="resultado" class="card"></div>
+        </div>
     
-    <div class="seccion">
-        <h2>Historial de préstamos:</h2>
-        <div id="historial"></div>
-    </div>
+        <div class="seccion">
+            <h2>Historial de préstamos:</h2>
+            <div id="historial"></div>
+        </div>
 
-    <button id="borrar">BORRAR HISTORIAL</button>
+        <button id="borrar">BORRAR HISTORIAL</button>
+    </div>  
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 </html>
+
