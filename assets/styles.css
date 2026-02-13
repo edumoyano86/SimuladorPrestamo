@@ -54,6 +54,12 @@ button {
     cursor: pointer;
 }
 
+#edicion {
+    display:none; 
+    color:red; 
+    font-weight:bold;
+}
+
 .seccion {
   margin-top: 30px;
   padding-top: 15px;

@@ -11,6 +11,7 @@ const inputMonto = document.getElementById("monto");
 const selectPlazo = document.getElementById("plazo");
 const selectTipo = document.getElementById("tipo");
 const botonCalcular = document.getElementById("calcular");
+const edicion = document.getElementById("edicion");
 const resultado = document.getElementById("resultado");
 const historial = document.getElementById("historial");
 const botonBorrar = document.getElementById("borrar");
@@ -152,6 +153,15 @@ botonCalcular.addEventListener("click", () => {
     prestamos.push(prestamo);
   }
 
+  // Para que el boton vuelva a su estado original despues de editar el prestamo
+  botonCalcular.textContent = "CALCULAR";
+  edicion.style.display = "none";
+
+  inputNombre.value = "";
+  inputEdad.value = "";
+  inputIngreso.value = "";
+  inputMonto.value = "";
+
  // Muestro el resultado 
   resultado.innerHTML = `
     <p><strong>Cliente:</strong> ${nombre}</p>
@@ -195,7 +205,11 @@ function editarPrestamo(index) {
     selectPlazo.value = prestamo.plazo;
   }, 0);
 
+  // Para que se note la diferencia en el formulario la diferencia entre calcular y editar
   indiceEdicion = index;
+
+  botonCalcular.textContent = "GUARDAR CAMBIOS";
+  edicion.style.display = "block";
 }
 
 

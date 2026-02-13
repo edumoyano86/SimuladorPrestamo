@@ -1,5 +1,5 @@
 
-// FUNCIONES de calculos
+// FUNCIONES de calculos matematicos
 
 function obtenerInteres(tipo, plazo, tiposPrestamo) {
 
